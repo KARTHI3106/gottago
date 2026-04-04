@@ -184,6 +184,35 @@ class FraudCheckRequest(BaseModel):
     pass
 
 
+class ManualClaimRequest(BaseModel):
+    worker_id: str
+    trigger_type: str
+    zone: str | None = None
+
+
+@router.post("/manual")
+async def create_manual_claim(body: ManualClaimRequest):
+    """Create a manual claim for demo or support exception flows."""
+    supabase = get_supabase()
+    worker_result = (
+        supabase.table("workers")
+        .select("id, zone")
+        .eq("worker_id", body.worker_id)
+        .single()
+        .execute()
+    )
+    if not worker_result.data:
+        raise HTTPException(status_code=404, detail="Worker not found")
+
+    worker = worker_result.data
+    return await auto_create_claim({
+        "worker_id": worker["id"],
+        "trigger_type": body.trigger_type,
+        "trigger_timestamp": datetime.now(timezone.utc).isoformat(),
+        "zone": body.zone or worker.get("zone"),
+    })
+
+
 @router.post("/{claim_id}/fraud-check")
 async def rerun_fraud_check(claim_id: str):
     """Re-run fraud checks on an existing claim."""
@@ -227,7 +256,7 @@ async def process_claim_payout(claim_id: str):
         raise HTTPException(status_code=404, detail="Claim not found")
 
     claim = claim_result.data
-    if claim["status"] not in ("approved", "pending"):
+    if claim["status"] not in ("approved", "pending", "payout_failed"):
         raise HTTPException(status_code=400, detail=f"Cannot pay claim with status: {claim['status']}")
 
     from services.payout_service import orchestrate_payout

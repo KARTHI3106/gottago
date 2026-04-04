@@ -48,6 +48,8 @@ export const claimsApi = {
     apiFetch(`/api/v1/claims/${workerId}`),
   getClaimDetail: (claimId: string) =>
     apiFetch(`/api/v1/claims/${claimId}/detail`),
+  createManualClaim: (body: Record<string, unknown>) =>
+    apiFetch('/api/v1/claims/manual', { method: 'POST', body: JSON.stringify(body) }),
   rerunFraudCheck: (claimId: string) =>
     apiFetch(`/api/v1/claims/${claimId}/fraud-check`, { method: 'POST' }),
   processPayout: (claimId: string) =>

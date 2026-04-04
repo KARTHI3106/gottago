@@ -21,7 +21,10 @@ class RazorpayXClient:
     def __init__(self) -> None:
         self.key_id = settings.razorpay_key_id
         self.key_secret = settings.razorpay_key_secret
-        if not self.key_id or not self.key_secret:
+        self.mock_mode = settings.guidewire_env.lower() != "production"
+        if self.mock_mode:
+            logger.info("RazorpayXClient running in mock payout mode")
+        elif not self.key_id or not self.key_secret:
             logger.warning(
                 "Razorpay credentials not configured. "
                 "Set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in .env"
@@ -29,6 +32,23 @@ class RazorpayXClient:
 
     def _auth(self) -> tuple[str, str]:
         return (self.key_id, self.key_secret)
+
+    def _mock_fund_account(self, rider_id: str, upi_id: str) -> dict[str, Any]:
+        return {
+            "fund_account_id": f"FAKE-FA-{uuid.uuid4().hex[:10].upper()}",
+            "contact_id": rider_id,
+            "upi_id": upi_id,
+            "status": True,
+        }
+
+    def _mock_payout(self, amount_paise: int, claim_id: str) -> dict[str, Any]:
+        return {
+            "payout_id": f"FAKE-PO-{uuid.uuid4().hex[:10].upper()}",
+            "status": "processed",
+            "utr": f"UTR{uuid.uuid4().hex[:12].upper()}",
+            "amount_paise": amount_paise,
+            "claim_id": claim_id,
+        }
 
     async def create_fund_account(
         self,
@@ -44,6 +64,15 @@ class RazorpayXClient:
         Returns:
             Dict with fund_account_id and status.
         """
+        if self.mock_mode:
+            logger.info(
+                "RazorpayX mock: creating fund account for rider %s", rider_id
+            )
+            return self._mock_fund_account(rider_id, upi_id)
+
+        if not self.key_id or not self.key_secret:
+            raise RuntimeError("Razorpay credentials missing for production payouts")
+
         idempotency_key = f"fa-{rider_id}-{uuid.uuid4().hex[:8]}"
 
         async with httpx.AsyncClient(timeout=30.0) as client:
@@ -94,6 +123,18 @@ class RazorpayXClient:
         Returns:
             Dict with payout_id, status, and UTR.
         """
+        if self.mock_mode:
+            logger.info(
+                "RazorpayX mock: disbursing %d paise to rider %s for claim %s",
+                amount_paise,
+                rider_id,
+                claim_id,
+            )
+            return self._mock_payout(amount_paise, claim_id)
+
+        if not self.key_id or not self.key_secret:
+            raise RuntimeError("Razorpay credentials missing for production payouts")
+
         idempotency_key = f"po-{claim_id}-{uuid.uuid4().hex[:8]}"
         account_id = fund_account_id or rider_id
 

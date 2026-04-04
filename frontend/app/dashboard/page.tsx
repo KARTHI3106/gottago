@@ -4,22 +4,14 @@ import { Suspense, useEffect, useState, useCallback } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import {
-  Shield,
-  CloudRain,
-  Thermometer,
-  Wind,
-  AlertTriangle,
-  Cloud,
-  FileText,
-} from 'lucide-react'
+import { Shield, AlertTriangle } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { PolicyCard } from '@/components/policy-card'
 import { PremiumBreakdown } from '@/components/premium-breakdown'
 import { ClaimsTimeline } from '@/components/claims-timeline'
-import { policiesApi, premiumsApi, claimsApi } from '@/lib/api'
+import { claimsApi } from '@/lib/api'
 
 interface Worker {
   id: string
@@ -45,29 +37,27 @@ interface Policy {
   worker_city?: string
 }
 
-const TRIGGER_ICONS = {
-  heavy_rainfall: CloudRain,
-  extreme_heat: Thermometer,
-  severe_aqi: Wind,
-  government_bandh: AlertTriangle,
-  compound_disruption: Cloud,
+interface ClaimRecord {
+  id?: string
+  claim_number: string
+  trigger_type: string
+  trigger_timestamp: string
+  payout_amount: number
+  status: 'pending' | 'approved' | 'rejected' | 'paid' | 'flagged' | 'payout_failed' | 'error'
+  fraud_score: number
+  approved_at?: string
+  paid_at?: string
+  transaction_id?: string
+  created_at?: string
 }
 
-const TRIGGER_LABELS: Record<string, string> = {
-  heavy_rainfall: 'Heavy Rain',
-  extreme_heat: 'Extreme Heat',
-  severe_aqi: 'Poor AQI',
-  government_bandh: 'Bandh',
-  compound_disruption: 'Compound',
-}
-
-const TRIGGER_PAYOUTS: Record<string, number> = {
-  heavy_rainfall: 300,
-  extreme_heat: 360,
-  severe_aqi: 240,
-  government_bandh: 480,
-  compound_disruption: 300,
-}
+const MANUAL_CLAIM_TRIGGERS = [
+  'heavy_rainfall',
+  'extreme_heat',
+  'severe_aqi',
+  'government_bandh',
+  'compound_disruption',
+] as const
 
 function DashboardContent() {
   const params = useSearchParams()
@@ -76,10 +66,13 @@ function DashboardContent() {
   const [worker, setWorker] = useState<Worker | null>(null)
   const [policy, setPolicy] = useState<Policy | null>(null)
   const [breakdown, setBreakdown] = useState<object | null>(null)
-  const [claims, setClaims] = useState<object[]>([])
+  const [claims, setClaims] = useState<ClaimRecord[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [renewLoading, setRenewLoading] = useState(false)
+  const [manualClaimLoading, setManualClaimLoading] = useState(false)
+  const [payoutLoadingId, setPayoutLoadingId] = useState<string | null>(null)
+  const [claimActionMessage, setClaimActionMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
 
   const fetchData = useCallback(async () => {
     if (!workerId || workerId === 'demo') {
@@ -106,7 +99,7 @@ function DashboardContent() {
 
       const claimsRes = await fetch(`/api/v1/claims/${workerId}`)
       if (claimsRes.ok) {
-        setClaims(await claimsRes.json() as object[])
+        setClaims(await claimsRes.json() as ClaimRecord[])
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load data')
@@ -137,6 +130,69 @@ function DashboardContent() {
   const handleResume = async (policyId: string) => {
     await fetch(`/api/v1/policies/${policyId}/resume`, { method: 'POST' })
     fetchData()
+  }
+
+  const handleManualClaim = async () => {
+    if (!workerId || workerId === 'demo') return
+
+    setManualClaimLoading(true)
+    setClaimActionMessage(null)
+    try {
+      const usedTriggers = new Set(claims.map((claim) => claim.trigger_type))
+      const triggerType =
+        MANUAL_CLAIM_TRIGGERS.find((trigger) => !usedTriggers.has(trigger)) ??
+        MANUAL_CLAIM_TRIGGERS[0]
+
+      const result = await claimsApi.createManualClaim({
+        worker_id: workerId,
+        trigger_type: triggerType,
+      }) as { skipped?: boolean; reason?: string }
+
+      if (result.skipped) {
+        setClaimActionMessage({
+          type: 'error',
+          text: result.reason ?? 'Manual claim could not be created.',
+        })
+      } else {
+        setClaimActionMessage({
+          type: 'success',
+          text: `Manual ${triggerType.replace(/_/g, ' ')} claim created successfully.`,
+        })
+      }
+      await fetchData()
+    } catch (err) {
+      setClaimActionMessage({
+        type: 'error',
+        text: err instanceof Error ? err.message : 'Manual claim creation failed.',
+      })
+    } finally {
+      setManualClaimLoading(false)
+    }
+  }
+
+  const handleProcessPayout = async (claimId: string) => {
+    setPayoutLoadingId(claimId)
+    setClaimActionMessage(null)
+    try {
+      const result = await claimsApi.processPayout(claimId) as {
+        razorpay?: { payout_id?: string }
+      }
+      setClaimActionMessage({
+        type: 'success',
+        text: result.razorpay?.payout_id
+          ? `Payout processed successfully. Transaction ID: ${result.razorpay.payout_id}`
+          : 'Payout processed successfully.',
+      })
+      await fetchData()
+    } catch (err) {
+      setClaimActionMessage({
+        type: 'error',
+        text: err instanceof Error ? err.message : 'Payout processing failed.',
+      })
+      await fetchData()
+    } finally {
+      setPayoutLoadingId(null)
+    }
   }
 
   if (!workerId || workerId === 'demo') {
@@ -256,12 +312,29 @@ function DashboardContent() {
             </div>
           </CardHeader>
           <CardContent>
+            {claimActionMessage && (
+              <div
+                className={`mb-4 rounded-xl border px-4 py-3 text-sm ${
+                  claimActionMessage.type === 'success'
+                    ? 'border-status-success/30 bg-status-success/10 text-status-success'
+                    : 'border-status-danger/30 bg-status-danger/10 text-status-danger'
+                }`}
+              >
+                {claimActionMessage.text}
+              </div>
+            )}
             {loading ? (
               <div className="space-y-3">
                 {[1, 2].map((i) => <div key={i} className="skeleton h-16 rounded-card" />)}
               </div>
             ) : (
-              <ClaimsTimeline claims={claims as any[]} />
+              <ClaimsTimeline
+                claims={claims}
+                onManualClaim={handleManualClaim}
+                manualClaimLoading={manualClaimLoading}
+                onProcessPayout={handleProcessPayout}
+                payoutLoadingId={payoutLoadingId}
+              />
             )}
           </CardContent>
         </Card>

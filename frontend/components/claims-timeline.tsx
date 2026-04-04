@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { Button } from '@/components/ui/button'
 import {
   Wind,
   FileText,
@@ -21,7 +22,7 @@ interface Claim {
   trigger_type: string
   trigger_timestamp: string
   payout_amount: number
-  status: 'pending' | 'approved' | 'rejected' | 'paid' | 'flagged'
+  status: 'pending' | 'approved' | 'rejected' | 'paid' | 'flagged' | 'payout_failed' | 'error'
   fraud_score: number
   approved_at?: string
   paid_at?: string
@@ -31,6 +32,10 @@ interface Claim {
 
 interface ClaimsTimelineProps {
   claims: Claim[]
+  onManualClaim?: () => void
+  manualClaimLoading?: boolean
+  onProcessPayout?: (claimId: string) => void
+  payoutLoadingId?: string | null
 }
 
 const TRIGGER_LABELS: Record<string, string> = {
@@ -64,8 +69,7 @@ const item = {
 
 function getStages(claim: Claim) {
   const TriggerIcon = getTriggerIcon(claim.trigger_type)
-  const isPending = claim.status === 'pending' || claim.status === 'flagged'
-  
+
   const stages = [
     {
       icon: TriggerIcon,
@@ -92,7 +96,12 @@ function getStages(claim: Claim) {
     {
       icon: ShieldCheck,
       label: 'Fraud checks',
-      detail: claim.fraud_score < 0.3 ? 'Assessment completed by sovereign verification board.' : claim.fraud_score < 0.7 ? 'Under review by verification board.' : 'Flagged for manual review.',
+      detail:
+        claim.fraud_score < 0.3
+          ? 'Assessment completed by sovereign verification board.'
+          : claim.fraud_score < 0.7
+            ? 'Under review by verification board.'
+            : 'Flagged for manual review.',
       time: null,
       done: true,
       iconClass: 'bg-brand-primary text-[#000000]',
@@ -102,11 +111,16 @@ function getStages(claim: Claim) {
     },
   ]
 
-  if (claim.status === 'approved' || claim.status === 'paid') {
+  if (
+    claim.status === 'approved' ||
+    claim.status === 'paid' ||
+    claim.status === 'payout_failed' ||
+    claim.status === 'error'
+  ) {
     stages.push({
       icon: CheckCircle,
       label: 'Approved',
-      detail: `Payout of ₹${claim.payout_amount.toFixed(2)} authorized into Vault.`,
+      detail: `Payout of Rs.${claim.payout_amount.toFixed(2)} authorized into Vault.`,
       time: claim.approved_at ?? null,
       done: true,
       iconClass: 'bg-status-success text-[#000000]',
@@ -144,13 +158,27 @@ function getStages(claim: Claim) {
     stages.push({
       icon: Wallet,
       label: 'Payout executed',
-      detail: claim.transaction_id ? `Transaction ID: ${claim.transaction_id}` : 'Funds transferred to your registered wallet.',
+      detail: claim.transaction_id
+        ? `Transaction ID: ${claim.transaction_id}`
+        : 'Funds transferred to your registered wallet.',
       time: claim.paid_at ?? null,
       done: true,
       iconClass: 'bg-status-success text-[#000000]',
-      lineClass: 'bg-status-success', // End of line, but just in case
+      lineClass: 'bg-status-success',
       cardClass: 'border-transparent hover:border-surface-border',
       labelClass: 'text-status-success',
+    })
+  } else if (claim.status === 'payout_failed' || claim.status === 'error') {
+    stages.push({
+      icon: XCircle,
+      label: 'Payout retry required',
+      detail: 'The disbursal attempt failed and can be safely retried from the dashboard.',
+      time: null,
+      done: true,
+      iconClass: 'bg-status-danger text-[#000000]',
+      lineClass: 'bg-status-danger',
+      cardClass: 'border-status-danger/20 hover:border-status-danger/40',
+      labelClass: 'text-status-danger',
     })
   } else if (claim.status !== 'rejected') {
     stages.push({
@@ -186,7 +214,13 @@ function formatTime(ts: string | null) {
   }
 }
 
-export function ClaimsTimeline({ claims }: ClaimsTimelineProps) {
+export function ClaimsTimeline({
+  claims,
+  onManualClaim,
+  manualClaimLoading,
+  onProcessPayout,
+  payoutLoadingId,
+}: ClaimsTimelineProps) {
   if (claims.length === 0) {
     return (
       <section className="mb-10">
@@ -198,6 +232,18 @@ export function ClaimsTimeline({ claims }: ClaimsTimelineProps) {
             Claims generate automatically upon triggers
           </p>
         </div>
+        {onManualClaim ? (
+          <div className="mt-4">
+            <Button
+              className="w-full"
+              variant="outline"
+              loading={manualClaimLoading}
+              onClick={onManualClaim}
+            >
+              Create demo claim
+            </Button>
+          </div>
+        ) : null}
       </section>
     )
   }
@@ -226,18 +272,20 @@ export function ClaimsTimeline({ claims }: ClaimsTimelineProps) {
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center z-10 ${stage.iconClass}`}>
                         <StageIcon className="h-4 w-4" />
                       </div>
-                      {!isLast && (
+                      {!isLast ? (
                         <div className={`w-0.5 h-12 ${stage.lineClass}`}></div>
-                      )}
+                      ) : null}
                     </div>
                     <div className="flex-1 pb-8">
                       {stage.done ? (
                         <div className={`bg-surface p-4 rounded-xl rounded-tl-none relative transition-all duration-300 border ${stage.cardClass}`}>
                           <p className={`text-xs font-bold mb-1 ${stage.labelClass}`}>{stage.label}</p>
                           <p className="text-sm text-text-secondary">{stage.detail}</p>
-                          {stage.time && (
-                            <span className="absolute top-3 right-3 text-[10px] text-text-muted font-mono">{formatTime(stage.time)}</span>
-                          )}
+                          {stage.time ? (
+                            <span className="absolute top-3 right-3 text-[10px] text-text-muted font-mono">
+                              {formatTime(stage.time)}
+                            </span>
+                          ) : null}
                         </div>
                       ) : (
                         <div className="pt-1.5 opacity-60">
@@ -249,15 +297,38 @@ export function ClaimsTimeline({ claims }: ClaimsTimelineProps) {
                   </motion.div>
                 )
               })}
+              {onProcessPayout && claim.id && (
+                claim.status === 'approved' ||
+                claim.status === 'pending' ||
+                claim.status === 'payout_failed'
+              ) ? (
+                <motion.div variants={item} className="ml-12 -mt-3 mb-4">
+                  <Button
+                    size="sm"
+                    variant={claim.status === 'payout_failed' ? 'destructive' : 'default'}
+                    loading={payoutLoadingId === claim.id}
+                    onClick={() => onProcessPayout(claim.id!)}
+                  >
+                    {claim.status === 'payout_failed' ? 'Retry payout' : 'Process payout'}
+                  </Button>
+                </motion.div>
+              ) : null}
             </div>
           )
         })}
 
-        <motion.div variants={item}>
-          <button className="w-full py-4 rounded-xl border border-surface-border text-text-primary font-bold text-sm bg-surface-card hover:bg-surface hover:border-brand-primary/50 transition-colors">
-            File manual exception claim
-          </button>
-        </motion.div>
+        {onManualClaim ? (
+          <motion.div variants={item}>
+            <Button
+              className="w-full"
+              variant="outline"
+              loading={manualClaimLoading}
+              onClick={onManualClaim}
+            >
+              File manual exception claim
+            </Button>
+          </motion.div>
+        ) : null}
       </motion.div>
     </section>
   )
