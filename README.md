@@ -35,6 +35,7 @@ _Personalised earnings velocity collapse protection for Swiggy and Zomato delive
 13. [Trigger-to-Payout Workflow](#13-trigger-to-payout-workflow)
 14. [Tech Stack](#14-tech-stack)
 15. [Adversarial Defense & Anti-Spoofing Strategy](#15-adversarial-defense--anti-spoofing-strategy)
+16. [Pitch Deck](#16-pitch-deck)
 
 ---
 
@@ -655,6 +656,12 @@ The worst outcome is not a spoofer getting paid. It is an honest worker, stuck i
 
 **The bottom line:** A spoofer who fakes GPS but cannot fake cell towers, Wi-Fi environment, accelerometer data, and platform order history simultaneously will be caught. An honest worker who loses cell signal in a storm will still get paid, either instantly or within 4 hours, and will never be auto-rejected without human review.
 
+---
+
+## 16. Pitch Deck
+
+You can access our pitch deck presentation here:
+**[GottaGO-PitchDeck.pdf](https://github.com/user-attachments/files/26836606/GottaGO-PitchDeck.pdf)** 
 ---
 
 <div align="center">
