@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+html { background: #ffffff; }
+body {
+  width: 720pt; height: 405pt; margin: 0; padding: 0;
+  background: #F5F0E8; font-family: Arial, sans-serif;
+  display: flex; position: relative; overflow: hidden;
+}
+.red-block {
+  position: absolute; top: 0; left: 0; width: 240pt; height: 200pt;
+  background: #BE1E2D;
+}
+.left-header {
+  position: absolute; top: 30pt; left: 24pt; width: 192pt;
+}
+.section-label {
+  margin: 0 0 4pt 0; padding: 0;
+  color: #F5F0E8; font-size: 9pt; letter-spacing: 3pt;
+  text-transform: uppercase;
+}
+.section-title {
+  margin: 0 0 10pt 0; padding: 0;
+  color: #F5F0E8; font-size: 22pt; font-weight: bold;
+  line-height: 1.2;
+}
+.subtitle {
+  margin: 0; padding: 0;
+  color: #F5DDD0; font-size: 9pt; line-height: 1.5;
+}
+.blue-block {
+  position: absolute; top: 200pt; left: 0; width: 240pt; height: 205pt;
+  background: #1A4B8C;
+}
+.base-info {
+  position: absolute; top: 218pt; left: 24pt; width: 192pt;
+}
+.base-label {
+  margin: 0 0 2pt 0; padding: 0;
+  color: #F2C41D; font-size: 9pt; letter-spacing: 2pt;
+  text-transform: uppercase;
+}
+.base-value {
+  margin: 0 0 6pt 0; padding: 0;
+  color: #F5F0E8; font-size: 28pt; font-weight: bold;
+}
+.base-sub {
+  margin: 0; padding: 0;
+  color: #BBCCDD; font-size: 9pt; line-height: 1.4;
+}
+.right-content {
+  position: absolute; top: 24pt; left: 260pt; width: 424pt;
+}
+.table-header {
+  display: flex; padding: 8pt 10pt; background: #1A1A1A;
+}
+.th-col1 { width: 100pt; }
+.th-col2 { width: 90pt; }
+.th-col3 { width: 90pt; }
+.th-col4 { width: 90pt; }
+.th-text {
+  margin: 0; padding: 0;
+  color: #F2C41D; font-size: 8pt; font-weight: bold;
+  letter-spacing: 1pt; text-transform: uppercase;
+}
+.table-row {
+  display: flex; padding: 7pt 10pt;
+  border-bottom: 1pt solid #DDDDDD;
+}
+.row-alt { background: #EDE8DF; }
+.td-text {
+  margin: 0; padding: 0;
+  color: #333333; font-size: 9pt;
+}
+.td-col1 { width: 100pt; }
+.td-col2 { width: 90pt; }
+.td-col3 { width: 90pt; }
+.td-col4 { width: 90pt; }
+.td-highlight {
+  margin: 0; padding: 0;
+  color: #BE1E2D; font-size: 9pt; font-weight: bold;
+}
+.affordability {
+  position: absolute; bottom: 20pt; left: 260pt; width: 420pt;
+  padding: 10pt; background: #1A1A1A;
+}
+.aff-text {
+  margin: 0; padding: 0;
+  color: #F5F0E8; font-size: 9pt; line-height: 1.5;
+}
+</style>
+</head>
+<body>
+<div class="red-block"></div>
+<div class="left-header">
+  <p class="section-label">05 &mdash; Business Value</p>
+  <h1 class="section-title">Weekly Premium Model</h1>
+  <p class="subtitle">Actuarially derived from 13 events/year weighted average. 65% loss ratio target. 23% operating load.</p>
+</div>
+<div class="blue-block"></div>
+<div class="base-info">
+  <p class="base-label">Base Premium</p>
+  <p class="base-value">159/wk</p>
+  <p class="base-sub">XGBoost multiplier range: 0.5x to 2.0x. Final premium: 80-318/week. Always below 3% of earnings.</p>
+</div>
+<div class="right-content">
+  <div class="table-header">
+    <div class="th-col1"><p class="th-text">Trigger</p></div>
+    <div class="th-col2"><p class="th-text">Payout</p></div>
+    <div class="th-col3"><p class="th-text">Events/Yr</p></div>
+    <div class="th-col4"><p class="th-text">Source</p></div>
+  </div>
+  <div class="table-row">
+    <div class="td-col1"><p class="td-text">Heavy Rainfall</p></div>
+    <div class="td-col2"><p class="td-highlight">300</p></div>
+    <div class="td-col3"><p class="td-text">4</p></div>
+    <div class="td-col4"><p class="td-text">OpenWeather</p></div>
+  </div>
+  <div class="table-row row-alt">
+    <div class="td-col1"><p class="td-text">Extreme Heat</p></div>
+    <div class="td-col2"><p class="td-highlight">360</p></div>
+    <div class="td-col3"><p class="td-text">3</p></div>
+    <div class="td-col4"><p class="td-text">OpenWeather</p></div>
+  </div>
+  <div class="table-row">
+    <div class="td-col1"><p class="td-text">Severe AQI</p></div>
+    <div class="td-col2"><p class="td-highlight">240</p></div>
+    <div class="td-col3"><p class="td-text">2</p></div>
+    <div class="td-col4"><p class="td-text">CPCB/WAQI</p></div>
+  </div>
+  <div class="table-row row-alt">
+    <div class="td-col1"><p class="td-text">Govt Bandh</p></div>
+    <div class="td-col2"><p class="td-highlight">480</p></div>
+    <div class="td-col3"><p class="td-text">1</p></div>
+    <div class="td-col4"><p class="td-text">NDMA/State</p></div>
+  </div>
+  <div class="table-row">
+    <div class="td-col1"><p class="td-text">Compound Score</p></div>
+    <div class="td-col2"><p class="td-highlight">300</p></div>
+    <div class="td-col3"><p class="td-text">3</p></div>
+    <div class="td-col4"><p class="td-text">Composite</p></div>
+  </div>
+</div>
+<div class="affordability">
+  <p class="aff-text"><b>Vikram (Mumbai, monsoon):</b> 241/wk (2.9% of 8,400 earnings) | <b>Suresh (Hyderabad, Feb):</b> 97/wk (2.0% of 4,800 earnings) | Both below 3% ceiling.</p>
+</div>
+</body>
+</html>

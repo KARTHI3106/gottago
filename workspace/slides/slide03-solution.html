@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+html { background: #ffffff; }
+body {
+  width: 720pt; height: 405pt; margin: 0; padding: 0;
+  background: #1A1A1A; font-family: Arial, sans-serif;
+  display: flex; position: relative; overflow: hidden;
+}
+.yellow-block {
+  position: absolute; top: 0; left: 0; width: 260pt; height: 405pt;
+  background: #F2C41D;
+}
+.left-content {
+  position: absolute; top: 40pt; left: 24pt; width: 212pt;
+}
+.section-label {
+  margin: 0 0 4pt 0; padding: 0;
+  color: #1A1A1A; font-size: 9pt; letter-spacing: 3pt;
+  text-transform: uppercase;
+}
+.section-title {
+  margin: 0 0 12pt 0; padding: 0;
+  color: #1A1A1A; font-size: 28pt; font-weight: bold;
+  line-height: 1.15;
+}
+.solution-desc {
+  margin: 0 0 16pt 0; padding: 0;
+  color: #333333; font-size: 10pt; line-height: 1.6;
+}
+.blue-circle {
+  position: absolute; bottom: 30pt; left: 180pt; width: 60pt; height: 60pt;
+  background: #1A4B8C; border-radius: 50%;
+}
+.right-content {
+  position: absolute; top: 30pt; left: 284pt; width: 400pt;
+}
+.scenario-card {
+  margin: 0 0 10pt 0; padding: 10pt 14pt;
+  background: #252525;
+  border-left: 4pt solid #BE1E2D;
+}
+.scenario-title {
+  margin: 0 0 4pt 0; padding: 0;
+  color: #F2C41D; font-size: 11pt; font-weight: bold;
+}
+.scenario-body {
+  margin: 0; padding: 0;
+  color: #BBBBBB; font-size: 9pt; line-height: 1.5;
+}
+.payout-tag {
+  margin: 4pt 0 0 0; padding: 0;
+  color: #BE1E2D; font-size: 10pt; font-weight: bold;
+}
+</style>
+</head>
+<body>
+<div class="yellow-block"></div>
+<div class="left-content">
+  <p class="section-label">02 &mdash; The Solution</p>
+  <h1 class="section-title">Automatic Parametric Payouts</h1>
+  <p class="solution-desc">GottaGO detects verified disruptions via real-time APIs. When thresholds breach, payouts land in the worker's UPI account within 2 hours. No claim form. No phone call. No paperwork.</p>
+</div>
+<div class="blue-circle"></div>
+<div class="right-content">
+  <div class="scenario-card">
+    <p class="scenario-title">Mumbai Monsoon: Arjun, 24</p>
+    <p class="scenario-body">Rainfall crosses 30mm/3hr in Dharavi. Zomato marks zone as reduced serviceability. Arjun misses his daily bonus.</p>
+    <p class="payout-tag">300 via UPI within 2 hours</p>
+  </div>
+  <div class="scenario-card">
+    <p class="scenario-title">Delhi AQI Crisis: Priya, 30</p>
+    <p class="scenario-body">AQI crosses 420 in Dwarka. GRAP Stage IV activates. Priya's entire afternoon earning window eliminated.</p>
+    <p class="payout-tag">240 via UPI within 2 hours</p>
+  </div>
+  <div class="scenario-card">
+    <p class="scenario-title">Bengaluru Bandh: Rajan, 27</p>
+    <p class="scenario-body">Unexpected bandh at 8AM. All platforms suspend operations. Rajan loses a full working day worth 800.</p>
+    <p class="payout-tag">480 via UPI within 2 hours</p>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+html { background: #ffffff; }
+body {
+  width: 720pt; height: 405pt; margin: 0; padding: 0;
+  background: #1A1A1A; font-family: Arial, sans-serif;
+  display: flex; position: relative; overflow: hidden;
+}
+.red-bar {
+  position: absolute; top: 0; right: 0; width: 10pt; height: 405pt;
+  background: #BE1E2D;
+}
+.yellow-dot {
+  position: absolute; top: 30pt; right: 30pt; width: 30pt; height: 30pt;
+  background: #F2C41D; border-radius: 50%;
+}
+.header {
+  position: absolute; top: 30pt; left: 36pt; width: 500pt;
+}
+.section-label {
+  margin: 0 0 4pt 0; padding: 0;
+  color: #F2C41D; font-size: 9pt; letter-spacing: 3pt;
+  text-transform: uppercase;
+}
+.section-title {
+  margin: 0; padding: 0;
+  color: #F5F0E8; font-size: 24pt; font-weight: bold;
+}
+.grid {
+  position: absolute; top: 95pt; left: 36pt; width: 648pt;
+  display: flex; flex-wrap: wrap; gap: 10pt;
+}
+.cell {
+  width: 156pt; padding: 12pt;
+  background: #252525; border-top: 3pt solid #1A4B8C;
+}
+.cell-label {
+  margin: 0 0 4pt 0; padding: 0;
+  color: #F2C41D; font-size: 8pt; letter-spacing: 2pt;
+  text-transform: uppercase;
+}
+.cell-tech {
+  margin: 0 0 4pt 0; padding: 0;
+  color: #F5F0E8; font-size: 11pt; font-weight: bold;
+}
+.cell-reason {
+  margin: 0; padding: 0;
+  color: #999999; font-size: 8pt; line-height: 1.4;
+}
+.cost-bar {
+  position: absolute; bottom: 0; left: 0; width: 720pt; height: 36pt;
+  background: #F2C41D; display: flex; align-items: center; justify-content: center;
+}
+.cost-text {
+  margin: 0; padding: 0;
+  color: #1A1A1A; font-size: 11pt; font-weight: bold; letter-spacing: 1pt;
+}
+</style>
+</head>
+<body>
+<div class="red-bar"></div>
+<div class="yellow-dot"></div>
+<div class="header">
+  <p class="section-label">04 &mdash; Tech Stack</p>
+  <h1 class="section-title">Built for Speed, Priced at Zero</h1>
+</div>
+<div class="grid">
+  <div class="cell">
+    <p class="cell-label">Backend</p>
+    <p class="cell-tech">Python + FastAPI</p>
+    <p class="cell-reason">Async-first, native ML model serving, fast prototyping</p>
+  </div>
+  <div class="cell">
+    <p class="cell-label">Frontend</p>
+    <p class="cell-tech">Next.js + Tailwind</p>
+    <p class="cell-reason">Responsive PWA, SSR for SEO, mobile-first for riders</p>
+  </div>
+  <div class="cell">
+    <p class="cell-label">ML: Pricing</p>
+    <p class="cell-tech">XGBoost</p>
+    <p class="cell-reason">Tabular data native, SHAP interpretable, trains on small datasets</p>
+  </div>
+  <div class="cell">
+    <p class="cell-label">ML: Fraud</p>
+    <p class="cell-tech">Isolation Forest</p>
+    <p class="cell-reason">Unsupervised anomaly detection, no labelled fraud data needed</p>
+  </div>
+  <div class="cell">
+    <p class="cell-label">Database</p>
+    <p class="cell-tech">PostgreSQL / Supabase</p>
+    <p class="cell-reason">Free tier, ACID compliant, relational schema for policies</p>
+  </div>
+  <div class="cell">
+    <p class="cell-label">Weather API</p>
+    <p class="cell-tech">OpenWeatherMap 3.0</p>
+    <p class="cell-reason">1,000 calls/day free, hourly rain and feels_like data</p>
+  </div>
+  <div class="cell">
+    <p class="cell-label">AQI API</p>
+    <p class="cell-tech">CPCB + WAQI</p>
+    <p class="cell-reason">Free, hourly, 300+ monitoring stations across India</p>
+  </div>
+  <div class="cell">
+    <p class="cell-label">Insurance Platform</p>
+    <p class="cell-tech">Guidewire Suite</p>
+    <p class="cell-reason">PolicyCenter, ClaimCenter, BillingCenter for policy lifecycle</p>
+  </div>
+</div>
+<div class="cost-bar">
+  <p class="cost-text">TOTAL HACKATHON BUILD COST: 0 &mdash; ALL FREE TIERS</p>
+</div>
+</body>
+</html>

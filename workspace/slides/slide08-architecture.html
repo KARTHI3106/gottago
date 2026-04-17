@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+html { background: #ffffff; }
+body {
+  width: 720pt; height: 405pt; margin: 0; padding: 0;
+  background: #F5F0E8; font-family: Arial, sans-serif;
+  display: flex; position: relative; overflow: hidden;
+}
+.red-top {
+  position: absolute; top: 0; left: 0; width: 720pt; height: 4pt;
+  background: #BE1E2D;
+}
+.header {
+  position: absolute; top: 18pt; left: 36pt; width: 648pt;
+}
+.section-label {
+  margin: 0 0 4pt 0; padding: 0;
+  color: #BE1E2D; font-size: 9pt; letter-spacing: 3pt;
+  text-transform: uppercase;
+}
+.section-title {
+  margin: 0; padding: 0;
+  color: #1A1A1A; font-size: 22pt; font-weight: bold;
+}
+/* Architecture diagram as placeholder - will be replaced with chart/image */
+.diagram-area {
+  position: absolute; top: 70pt; left: 36pt; width: 648pt; height: 310pt;
+  background: #EEEBE3;
+}
+.diagram-placeholder {
+  width: 648pt; height: 310pt;
+}
+</style>
+</head>
+<body>
+<div class="red-top"></div>
+<div class="header">
+  <p class="section-label">07 &mdash; System Architecture</p>
+  <h1 class="section-title">End-to-End Pipeline</h1>
+</div>
+<div class="diagram-area">
+  <div id="arch-diagram" class="placeholder diagram-placeholder"></div>
+</div>
+</body>
+</html>

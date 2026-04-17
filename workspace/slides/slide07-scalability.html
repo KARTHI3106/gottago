@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+html { background: #ffffff; }
+body {
+  width: 720pt; height: 405pt; margin: 0; padding: 0;
+  background: #1A1A1A; font-family: Arial, sans-serif;
+  display: flex; position: relative; overflow: hidden;
+}
+.yellow-bar {
+  position: absolute; top: 0; left: 0; width: 720pt; height: 6pt;
+  background: #F2C41D;
+}
+.header {
+  position: absolute; top: 24pt; left: 36pt; width: 648pt;
+}
+.section-label {
+  margin: 0 0 4pt 0; padding: 0;
+  color: #F2C41D; font-size: 9pt; letter-spacing: 3pt;
+  text-transform: uppercase;
+}
+.section-title {
+  margin: 0; padding: 0;
+  color: #F5F0E8; font-size: 24pt; font-weight: bold;
+}
+.two-col {
+  position: absolute; top: 86pt; left: 36pt; width: 648pt;
+  display: flex; gap: 20pt;
+}
+.col-left { width: 310pt; }
+.col-right { width: 310pt; }
+.pillar-card {
+  margin: 0 0 10pt 0; padding: 12pt;
+  border-left: 4pt solid #F2C41D; background: #252525;
+}
+.pillar-title {
+  margin: 0 0 6pt 0; padding: 0;
+  color: #F5F0E8; font-size: 12pt; font-weight: bold;
+}
+.pillar-body {
+  margin: 0; padding: 0;
+  color: #999999; font-size: 9pt; line-height: 1.5;
+}
+.pillar-card-blue {
+  margin: 0 0 10pt 0; padding: 12pt;
+  border-left: 4pt solid #1A4B8C; background: #252525;
+}
+.pillar-card-red {
+  margin: 0 0 10pt 0; padding: 12pt;
+  border-left: 4pt solid #BE1E2D; background: #252525;
+}
+.reinsurance-bar {
+  position: absolute; bottom: 0; left: 0; width: 720pt; height: 50pt;
+  background: #1A4B8C; display: flex; align-items: center; padding: 0 36pt;
+}
+.reinsurance-inner {
+  display: flex; gap: 30pt; align-items: center;
+}
+.re-label {
+  margin: 0; padding: 0;
+  color: #F2C41D; font-size: 8pt; letter-spacing: 2pt;
+  text-transform: uppercase;
+}
+.re-item {
+  margin: 0; padding: 0;
+  color: #CCDDEE; font-size: 9pt;
+}
+</style>
+</head>
+<body>
+<div class="yellow-bar"></div>
+<div class="header">
+  <p class="section-label">06 &mdash; Scalability and Feasibility</p>
+  <h1 class="section-title">From Hackathon to Production</h1>
+</div>
+<div class="two-col">
+  <div class="col-left">
+    <div class="pillar-card">
+      <p class="pillar-title">Free-Tier Launch</p>
+      <p class="pillar-body">Supabase (500MB), Vercel hosting, OpenWeatherMap (1,000 calls/day), WAQI (unlimited). Supports 3 cities at 15-min polling with zero infrastructure cost.</p>
+    </div>
+    <div class="pillar-card-blue">
+      <p class="pillar-title">Horizontal Scaling</p>
+      <p class="pillar-body">FastAPI async workers scale horizontally. ML models served via stateless endpoints. PostgreSQL supports read replicas. Architecture designed for multi-region deployment.</p>
+    </div>
+    <div class="pillar-card-red">
+      <p class="pillar-title">IRDAI Regulatory Path</p>
+      <p class="pillar-body">IRDAI Sandbox 2025 provides 6-12 month testing window. Precedent: Go Digit settled India's first parametric claim (Jan 2025). No regulatory blocker exists for gig-worker extension.</p>
+    </div>
+  </div>
+  <div class="col-right">
+    <div class="pillar-card">
+      <p class="pillar-title">ML Feedback Loop</p>
+      <p class="pillar-body">Week 1-4: Community-rated pricing. Week 5-12: Individual claim history incorporated. Month 4+: Full personalisation with weekly XGBoost refits on actual trigger-vs-predicted data.</p>
+    </div>
+    <div class="pillar-card-blue">
+      <p class="pillar-title">SmartShift Loss Reduction</p>
+      <p class="pillar-body">LSTM model predicts 48-hour disruption probability per shift block. Workers shift hours to green windows. Reduces claim payouts by ~15%: the insurer saves money, the worker earns more.</p>
+    </div>
+    <div class="pillar-card-red">
+      <p class="pillar-title">Guidewire-Native</p>
+      <p class="pillar-body">PolicyCenter, ClaimCenter, BillingCenter map 1:1. Zero legacy integration for carriers. Trigger-to-payout runs within Guidewire's claims workflow with parametric logic layered on top.</p>
+    </div>
+  </div>
+</div>
+<div class="reinsurance-bar">
+  <div class="reinsurance-inner">
+    <p class="re-label">Reinsurance</p>
+    <p class="re-item">Retention: First 50L/event</p>
+    <p class="re-item">Cat XL: 50L to 5Cr/event</p>
+    <p class="re-item">Stop-Loss: 150% of annual premium</p>
+  </div>
+</div>
+</body>
+</html>
