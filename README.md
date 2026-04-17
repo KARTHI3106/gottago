@@ -35,6 +35,7 @@ _Personalised earnings velocity collapse protection for Swiggy and Zomato delive
 13. [Trigger-to-Payout Workflow](#13-trigger-to-payout-workflow)
 14. [Tech Stack](#14-tech-stack)
 15. [Adversarial Defense & Anti-Spoofing Strategy](#15-adversarial-defense--anti-spoofing-strategy)
+16. [Pitch Deck](#pitch-deck)
 
 ---
 
@@ -654,6 +655,13 @@ The worst outcome is not a spoofer getting paid. It is an honest worker, stuck i
 - **The feedback loop matters.** Every false positive that a human adjuster overrides is logged as a corrective training example. The confidence model retrains weekly. Over time, the false positive rate decreases specifically for the edge cases that storms produce (tower outages, GPS drift, battery deaths). The model learns that these patterns correlate with genuine claims in bad weather, not with spoofing.
 
 **The bottom line:** A spoofer who fakes GPS but cannot fake cell towers, Wi-Fi environment, accelerometer data, and platform order history simultaneously will be caught. An honest worker who loses cell signal in a storm will still get paid, either instantly or within 4 hours, and will never be auto-rejected without human review.
+
+---
+
+## Pitch Deck
+
+You can access our pitch deck presentation here:
+**[View GottaGO Pitch Deck (Google Slides / PDF)](#)** <!-- Replace with actual link before submission -->
 
 ---
 

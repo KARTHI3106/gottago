@@ -19,3 +19,4 @@ venv/
 backend/ml/models/premium_xgboost.json
 backend/ml/training_data.csv
 misc/
+workspace/
