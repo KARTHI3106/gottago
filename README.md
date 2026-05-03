@@ -1,7 +1,7 @@
 <div align="center">
  
 # GottaGO  
- 
+  
 ### GottaGO: Weekly Income Protection for Food Delivery Partners
 
 _Personalised earnings velocity collapse protection for Swiggy and Zomato delivery workers_
