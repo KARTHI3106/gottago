@@ -5,7 +5,7 @@
 ### GottaGO: Weekly Income Protection for Food Delivery Partners
   
 _Personalised earnings velocity collapse protection for Swiggy and Zomato delivery workers_
-
+ 
 **Weekly income protection for Swiggy and Zomato delivery partners that pays automatically when verified external disruptions wipe out their earning day, with zero paperwork.**  
 
 ![Built With](https://img.shields.io/badge/Built%20With-Python%20%2B%20FastAPI-orange?style=flat-square)
